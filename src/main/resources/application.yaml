@@ -9,6 +9,9 @@ spring:
       database: APIs
       uri: mongodb+srv://leandroCahuana:jRtrVG9NOl0PVv73@cluster01.6kpaarv.mongodb.net/?appName=Cluster01
 
+rapidapi:
+  key: 2b3f490694msh6fc91ab716c1a86p1d367fjsn1cb8cca177e5
+
 springdoc:
   api-docs:
     enabled: true
