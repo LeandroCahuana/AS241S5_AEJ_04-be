@@ -1,5 +1,8 @@
 package ap1.leandro.cahuana.service;
 
-public class whatsAppService {
-    
+import reactor.core.publisher.Mono;
+import ap1.leandro.cahuana.model.WhatsApp;
+
+public interface WhatsAppService {
+    Mono<WhatsApp> validarNumero(String numero);
 }
