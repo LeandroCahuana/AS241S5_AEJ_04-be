@@ -17,8 +17,14 @@ public class WhatsAppServiceImpl implements WhatsAppService {
     private final WebClient webClient;
     private final WhatsAppRepository repository;
 
-    @Value("${rapidapi.key}")
+    @Value("${rapidapi.whatsapp.key}")
     private String apiKey;
+
+    @Value("${rapidapi.whatsapp.uri}")
+    private String uri;
+
+    @Value("${rapidapi.whatsapp.host}")
+    private String host;
 
     public WhatsAppServiceImpl(WebClient webClient, WhatsAppRepository repository) {
         this.webClient = webClient;
@@ -31,8 +37,8 @@ public Mono<WhatsApp> validarNumero(String numero) {
     String numeroLimpio = numero.replaceAll("\\s+", "");
 
     return webClient.post()
-            .uri("https://whatsapp-number-validator3.p.rapidapi.com/WhatsappNumberHasItWithToken")
-            .header("x-rapidapi-host", "whatsapp-number-validator3.p.rapidapi.com")
+            .uri(uri)
+            .header("x-rapidapi-host", host)
             .header("x-rapidapi-key", apiKey)
             .header("Content-Type", "application/json")
             .bodyValue(new WhatsAppRequest(numeroLimpio))

@@ -10,7 +10,13 @@ spring:
       uri: mongodb+srv://leandroCahuana:jRtrVG9NOl0PVv73@cluster01.6kpaarv.mongodb.net/?appName=Cluster01
 
 rapidapi:
-  key: 2b3f490694msh6fc91ab716c1a86p1d367fjsn1cb8cca177e5
+  speech:
+    key: 2b3f490694msh6fc91ab716c1a86p1d367fjsn1cb8cca177e5
+    host: speech-to-text-ai.p.rapidapi.com
+  whatsapp:
+    uri: https://whatsapp-number-validator3.p.rapidapi.com/WhatsappNumberHasItWithToken
+    key: 2b3f490694msh6fc91ab716c1a86p1d367fjsn1cb8cca177e5
+    host: whatsapp-number-validator3.p.rapidapi.com
 
 springdoc:
   api-docs:

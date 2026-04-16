@@ -23,8 +23,11 @@ public class speechToTextServiceImpl implements speechToTextService {
 
     private final WebClient webClient;
 
-    @Value("${rapidapi.key}")
+    @Value("${rapidapi.speech.key}")
     private String apiKey;
+
+    @Value("${rapidapi.speech.host}")
+    private String host;
 
     public speechToTextServiceImpl(WebClient webClient, speechToTextRepository repository) {
         this.webClient = webClient;
@@ -37,13 +40,13 @@ public class speechToTextServiceImpl implements speechToTextService {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
-                        .host("speech-to-text-ai.p.rapidapi.com")
+                        .host(host)
                         .path("/transcribe")
                         .queryParam("url", url)
                         .queryParam("lang", lang)
                         .queryParam("task", "transcribe")
                         .build())
-                .header("x-rapidapi-host", "speech-to-text-ai.p.rapidapi.com")
+                .header("x-rapidapi-host", host)
                 .header("x-rapidapi-key", apiKey)
                 .retrieve()
                 .bodyToMono(ApiResponse.class)
