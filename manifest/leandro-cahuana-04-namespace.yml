@@ -1,0 +1,6 @@
+# kubectl create namespace leandro-cahuana-04-namespace (COMANDO)
+# kubectl apply -f leandro-cahuana-04-namespace.yml (yml)
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: leandro-cahuana-04-namespace

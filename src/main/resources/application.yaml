@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: ${PORT}
 
 spring:
   application:
@@ -7,16 +7,16 @@ spring:
   data:
     mongodb:
       database: APIs
-      uri: mongodb+srv://leandroCahuana:jRtrVG9NOl0PVv73@cluster01.6kpaarv.mongodb.net/?appName=Cluster01
+      uri: ${DATABASE_URL}
 
 rapidapi:
   speech:
-    key: 2b3f490694msh6fc91ab716c1a86p1d367fjsn1cb8cca177e5
-    host: speech-to-text-ai.p.rapidapi.com
+    key: ${API_ONE_KEY}
+    host: ${API_ONE_HOST}
   whatsapp:
-    uri: https://whatsapp-number-validator3.p.rapidapi.com/WhatsappNumberHasItWithToken
-    key: 2b3f490694msh6fc91ab716c1a86p1d367fjsn1cb8cca177e5
-    host: whatsapp-number-validator3.p.rapidapi.com
+    uri: ${API_TWO_URI}
+    key: ${API_TWO_KEY}
+    host: ${API_TWO_HOST}
 
 springdoc:
   api-docs:
