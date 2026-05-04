@@ -2,6 +2,8 @@ package ap1.leandro.cahuana.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ap1.leandro.cahuana.dto.WhatsAppRequest;
 import ap1.leandro.cahuana.dto.WhatsAppResponse;
@@ -32,28 +34,79 @@ public class WhatsAppServiceImpl implements WhatsAppService {
     }
 
     @Override
-public Mono<WhatsApp> validarNumero(String numero) {
+    public Flux<WhatsApp> listarTodos(Boolean active) {
+        if (active != null) {
+            return repository.findAllByActive(active);
+        }
+        return repository.findAll();
+    }
 
-    String numeroLimpio = numero.replaceAll("\\s+", "");
+    private Mono<Boolean> consultarApi(String numeroLimpio) {
+        return webClient.post()
+                .uri(uri)
+                .header("x-rapidapi-host", host)
+                .header("x-rapidapi-key", apiKey)
+                .header("Content-Type", "application/json")
+                .bodyValue(new WhatsAppRequest(numeroLimpio))
+                .retrieve()
+                .bodyToMono(WhatsAppResponse.class)
+                .map(response -> "valid".equalsIgnoreCase(response.getStatus()));
+    }
 
-    return webClient.post()
-            .uri(uri)
-            .header("x-rapidapi-host", host)
-            .header("x-rapidapi-key", apiKey)
-            .header("Content-Type", "application/json")
-            .bodyValue(new WhatsAppRequest(numeroLimpio))
-            .retrieve()
-            .bodyToMono(WhatsAppResponse.class)
-            .map(response -> {
+    @Override
+    public Mono<WhatsApp> validarNumero(String numero) {
+        String numeroLimpio = numero.replaceAll("\\s+", "");
 
-                WhatsApp w = new WhatsApp();
+        return consultarApi(numeroLimpio)
+                .flatMap(esValido -> {
+                    WhatsApp w = new WhatsApp();
+                    w.setPhoneNumber(numeroLimpio);
+                    w.setValid(esValido);
+                    w.setCountry("N/A");
+                    w.setActive(true);
+                    return repository.save(w);
+                });
+    }
 
-                w.setPhoneNumber(numeroLimpio);
-                w.setValid("valid".equalsIgnoreCase(response.getStatus()));
-                w.setCountry("N/A");
+    @Override
+    public Mono<WhatsApp> obtenerPorId(String id) {
+        return repository.findById(id)
+                .switchIfEmpty(Mono.error(
+                        new RuntimeException("Registro no encontrado con id: " + id)));
+    }
 
-                return w;
-            })
-            .flatMap(repository::save);
-}
+    @Override
+    public Mono<WhatsApp> actualizarNumero(String id) {
+        return repository.findById(id)
+                .switchIfEmpty(Mono.error(
+                        new RuntimeException("Registro no encontrado con id: " + id)))
+                .flatMap(existente -> consultarApi(existente.getPhoneNumber())
+                        .flatMap(esValido -> {
+                            existente.setValid(esValido);
+                            return repository.save(existente);
+                        }));
+    }
+
+    @Override
+    public Mono<WhatsApp> eliminar(String id) {
+        return repository.findById(id)
+                .switchIfEmpty(Mono.error(
+                        new RuntimeException("Registro no encontrado con id: " + id)))
+                .flatMap(existente -> {
+                    existente.setActive(false);
+                    return repository.save(existente);
+                });
+    }
+
+    @Override
+    public Mono<WhatsApp> restaurar(String id) {
+        return repository.findById(id)
+                .switchIfEmpty(Mono.error(
+                        new RuntimeException("Registro no encontrado con id: " + id)))
+                .flatMap(existente -> {
+                    existente.setActive(true);
+                    return repository.save(existente);
+                });
+    }
+
 }
