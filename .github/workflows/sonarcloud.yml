@@ -3,12 +3,14 @@ name: SonarCloud
 on:
   push:
     branches:
+      - main
       - develop
       - feature/sp2-API-WhatsApp
       - feature/sp2-API-speechToText
 
   pull_request:
     branches:
+      - main
       - develop
       - feature/sp2-API-WhatsApp
       - feature/sp2-API-speechToText
