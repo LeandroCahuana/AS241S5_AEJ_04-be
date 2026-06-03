@@ -43,6 +43,7 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          MONGODB_URI: ${{ secrets.DB_TEST_SONARCLOUD }}
         run: mvn clean verify sonar:sonar \
           -Dsonar.projectKey=PROJECT_KEY \
           -Dsonar.organization=ORGANIZATION_KEY
