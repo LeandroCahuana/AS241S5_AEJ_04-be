@@ -1,0 +1,52 @@
+name: SonarCloud
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - feature/sp2-API-WhatsApp
+      - feature/sp2-API-speechToText
+
+  pull_request:
+    branches:
+      - main
+      - develop
+      - feature/sp2-API-WhatsApp
+      - feature/sp2-API-speechToText
+
+jobs:
+  sonar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Cache SonarCloud
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+
+      - name: Cache Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          DATABASE_URL: ${{ secrets.DB_TEST_SONARCLOUD }}
+        run: mvn clean package -DskipTests sonar:sonar
+          -Dsonar.projectKey=${{ secrets.PROJECT_KEY }}
+          -Dsonar.organization=${{ secrets.ORGANIZATION_KEY}}
+          -Dsonar.host.url=https://sonarcloud.io

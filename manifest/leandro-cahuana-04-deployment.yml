@@ -1,0 +1,23 @@
+# kubectl apply -f leandro-cahuana-04-deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leandro-cahuana-04-deployment
+  namespace: leandro-cahuana-04-namespace
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: leandro-cahuana-04-deployment        # Debe coincidir con las etiquetas del Service
+  template:
+    metadata:
+      labels:
+        app: leandro-cahuana-04-deployment      # Debe coincidir con las etiquetas del Service
+    spec:
+      containers:
+      - name: leandro-cahuana-04-container
+        image: cahuanaleandro248/ms-aej-apis:latest   # Reemplaza con tu imagen Docker Hub
+        imagePullPolicy: IfNotPresent        # Evitar traer siempre la última versión si hay una actual
+        envFrom:
+        - secretRef:
+            name: leandro-cahuana-04-secret  # Esto cargará todos los valores como variables de entorno

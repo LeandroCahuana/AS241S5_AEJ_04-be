@@ -1,0 +1,27 @@
+server:
+  port: ${PORT}
+
+spring:
+  application:
+    name: leandro.cahuana
+  data:
+    mongodb:
+      database: APIs
+      uri: ${DATABASE_URL}
+
+rapidapi:
+  speech:
+    key: ${API_ONE_KEY}
+    host: ${API_ONE_HOST}
+  whatsapp:
+    uri: ${API_TWO_URI}
+    key: ${API_TWO_KEY}
+    host: ${API_TWO_HOST}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
