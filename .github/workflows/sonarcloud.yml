@@ -45,6 +45,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           DATABASE_URL: ${{ secrets.DB_TEST_SONARCLOUD }}
         run: mvn clean package -DskipTests sonar:sonar
-          -Dsonar.projectKey=PROJECT_KEY
-          -Dsonar.organization=ORGANIZATION_KEY
+          -Dsonar.projectKey=${{ secrets.PROJECT_KEY }}
+          -Dsonar.organization=${{ secrets.ORGANIZATION_KEY}}
           -Dsonar.host.url=https://sonarcloud.io
